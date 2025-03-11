@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест по Математике</title>
+    <link rel="stylesheet" href="math.css">
+    
+</head>
+<body>
+  <div class="title">
+    <h1>Тест по Математике</h1>
+    <div class="names">
+      <p>Выполнил: Урозматов Алымбек <br>Проверил: Павел Сергеевич Панков</p>
+    </div>
+  </div>
+
+    <div class="quiz-container" id="question1">
+      <p id="score"></p>
+      <div class="question-container">
+        <div id="task"></div>
+        <input type="number" id="answer" placeholder="Ваш ответ" />
+      </div>
+      
+      <div class="answers-container">
+        <button onclick="generateTask()">Следующая задача</button>
+        <button onclick="checkAnswer()">Проверить</button>
+      </div>
+      <div class="result-container">
+        <p id="result"></p>
+      </div>
+    </div>
+
+
+    
+    
+
+
+    <script src="math.js"></script>
+</body>
+</html>
