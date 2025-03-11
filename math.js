@@ -1,36 +1,50 @@
 let correctAnswers = 0;
 let currentTask = 0; // Счетчик задач
 const totalTasks = 10; // Всего задач
+let correctAnswer; // Объявляем correctAnswer в глобальной области видимости
 
 // Функция для генерации задачи
 function generateTask() {
     // Генерация случайных чисел
     const num1 = Math.floor(Math.random() * 11) + 10; // Случайное число от 10 до 20 для сложения/вычитания
     const num2 = Math.floor(Math.random() * 11) + 10; // Случайное число от 10 до 20 для сложения/вычитания
-    const num3 = Math.floor(Math.random() * 9) + 2;  // Случайное число от 2 до 10 для умножения/деления
-    const num4 = Math.floor(Math.random() * 9) + 2;  // Случайное число от 2 до 10 для умножения/деления
 
     // Возможные операторы для сложения/вычитания
     const operator1 = Math.random() < 0.5 ? '+' : '-';
     // Возможные операторы для умножения/деления
     const operator2 = Math.random() < 0.5 ? '*' : '/';
 
-    // Генерация выражения с двумя операциями
-    let taskText = `${num1} ${operator1} ${num2} ${operator2} ${num3}`;
-
-    // Вычисление правильного ответа
     let result;
-    switch(operator2) {
-        case '*':
-            result = num2 * num3;
-            break;
-        case '/':
-            result = num2 / num3;
-            break;
+    let taskText;
+
+    if (operator2 === '/') {
+        // Для деления
+        let possibleDivisors = [];
+        // Ограничиваем диапазон делителей, чтобы они были меньше делимого
+        for (let i = 2; i < num2; i++) {
+            if (num2 % i === 0) {
+                possibleDivisors.push(i);
+            }
+        }
+
+        if (possibleDivisors.length === 0) {
+            // Если делителей нет, генерируем новую задачу
+            generateTask();
+            return;
+        }
+
+        const divisor = possibleDivisors[Math.floor(Math.random() * possibleDivisors.length)];
+        result = num2 / divisor;
+        taskText = `${num1} ${operator1} ${num2} / ${divisor}`;
+    } else {
+        // Для умножения
+        const num3 = Math.floor(Math.random() * 9) + 2;
+        result = num2 * num3;
+        taskText = `${num1} ${operator1} ${num2} * ${num3}`;
     }
 
     // Для сложения или вычитания
-    switch(operator1) {
+    switch (operator1) {
         case '+':
             correctAnswer = num1 + result;
             break;
@@ -49,6 +63,10 @@ function generateTask() {
 // Функция для проверки ответа
 function checkAnswer() {
     const userAnswer = parseFloat(document.getElementById('answer').value);
+    if (isNaN(userAnswer)) {
+        document.getElementById('result').textContent = 'Введите число!';
+        return;
+    }
     if (userAnswer === correctAnswer) {
         document.getElementById('result').textContent = 'Правильный ответ!';
         correctAnswers++; // Увеличиваем количество правильных ответов
@@ -66,10 +84,10 @@ function checkAnswer() {
         showFinalResult();
     } else {
         // После проверки ответа, блокируем поле ввода и не даем исправить ответ
-        document.getElementById('answer').disabled = true; 
+        document.getElementById('answer').disabled = true;
 
         // Переходим к следующей задаче через небольшую задержку
-        setTimeout(generateTask, 2000); // Генерация следующей задачи через 1 секунду
+        setTimeout(generateTask, 2000); // Генерация следующей задачи через 2 секунды
     }
 }
 
